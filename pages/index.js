@@ -8,9 +8,9 @@ import requests from "../utils/requests";
 export default function Home({ results }) {
   return (
     <div>
-      <head>
+      <Head>
         <title>Hulu 2.0</title>
-      </head>
+      </Head>
       <Header />
       <Nav />
       <Results results={results} />
@@ -24,11 +24,16 @@ export async function getServerSideProps(context) {
     `https://api.themoviedb.org/3${
       requests[genre]?.url || requests.fetchTrending.url
     }`
-  ).then((res) => res.json());
+  )
+    .then((res) => res.json())
+    .catch((error) => {
+      console.log(error);
+    });
 
   return {
     props: {
-      results: request.results,
+      // very dirty
+      results: request?.results || {},
     },
   };
 }
